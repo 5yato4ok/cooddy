@@ -424,7 +424,7 @@ struct NodeTypesMapper;
         {                                                                                              \
             return sizeof(THcxx);                                                                      \
         }                                                                                              \
-        virtual void Convert(ASTVisitor* visitor, const void* clangNode, Node* node)                   \
+        virtual void Convert(ASTVisitor* visitor, const void* clangNode, Node* node)override           \
         {                                                                                              \
             Convert(visitor, static_cast<const clang::TClang*>(clangNode), static_cast<THcxx*>(node)); \
         }                                                                                              \

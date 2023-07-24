@@ -7,6 +7,7 @@
 #include <ast/UnaryExpression.h>
 #include <dfa/TaintedChecker.h>
 #include <solver/FunctionBehavior.h>
+#include <utils/EnumMapping.h>
 
 #include "ast/CxxOperatorCallExpression.h"
 
@@ -16,7 +17,7 @@ class IntegerOverflowChecker : public TaintedChecker {
     Annotation::Kind myOverflowSinkKind;
     Annotation::Kind myCheckOverflowKind;
     struct IntOverflowCondition {
-        DECLARE_ENUM(OverflowType, OVERFLOW, TRUNCATION, LOOP_ITERATOR);
+        DECLARE_ENUM(OverflowType, _OVERFLOW, TRUNCATION, LOOP_ITERATOR);
         OverflowType overflowType : 4;
         uint32_t isUnsigned : 1;
         Condition::Operation operation : 8;
@@ -55,7 +56,7 @@ public:
                                    binExpr->GetOperation() == BinaryExpression::Operation::SUB_ASSIGN)) {
             return;
         }
-        IntOverflowCondition condition{explicitCheck ? IntOverflowCondition::OverflowType::OVERFLOW
+        IntOverflowCondition condition{explicitCheck ? IntOverflowCondition::OverflowType::_OVERFLOW
                                                      : IntOverflowCondition::OverflowType::LOOP_ITERATOR,
                                        type.IsUnsigned(), Condition::Operation::INT_OVERFLOW,
                                        uint8_t(type.GetSizeInBits()), 0};
@@ -75,7 +76,7 @@ public:
             return;
         }
         IntOverflowCondition condition{
-            explicitCheck ? IntOverflowCondition::OverflowType::OVERFLOW
+            explicitCheck ? IntOverflowCondition::OverflowType::_OVERFLOW
                           : IntOverflowCondition::OverflowType::LOOP_ITERATOR,
             type.IsUnsigned(), isDecrement ? Condition::Operation::INT_MIN_VAL : Condition::Operation::INT_MAX_VAL,
             uint8_t(type.GetSizeInBits()), 0};

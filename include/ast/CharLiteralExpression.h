@@ -25,7 +25,7 @@ public:
     DECLARE_KIND(LiteralExpression, Node::Kind::CHAR_LITERAL_EXPRESSION);
     DECLARE_SERIALIZE(CharLiteralExpression, myValue << myKind);
 
-    virtual LiteralType GetLiteralType() const
+    virtual LiteralType GetLiteralType() const override
     {
         return LiteralType::CHAR;
     }

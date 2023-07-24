@@ -4,6 +4,18 @@
 		{
 			"name": "default",
 			"binaryDir": "build",
+			"generator": "Unix Makefiles",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release",
+				"CMAKE_C_COMPILER": "clang",
+				"CMAKE_CXX_COMPILER": "clang++",
+				"CMAKE_COLOR_DIAGNOSTICS": "OFF"
+
+			}
+		},
+		{
+			"name": "default_linux",
+			"binaryDir": "build",
 			"generator": "Ninja",
 			"cacheVariables": {
 				"CMAKE_C_COMPILER": "gcc",

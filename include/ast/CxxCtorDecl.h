@@ -49,7 +49,7 @@ public:
         FunctionDecl::TraverseChildren(callback);
     }
 
-    std::optional<std::string> GetAttribute(std::string_view attrName) const
+    std::optional<std::string> GetAttribute(std::string_view attrName) const override
     {
         if (attrName == "IsCopy") {
             return std::to_string(IsCopy());

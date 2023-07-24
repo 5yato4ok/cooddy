@@ -28,7 +28,7 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi /permissive- /bigobj /EHsc -Wno-inconsistent-missing-override")
     set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
 else ()
-    add_compile_options(-Wswitch -Wswitch-default -Wunused-variable -Werror -fPIC)
+    add_compile_options(-Wswitch -Wswitch-default -Wunused-variable -fPIC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O0")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
@@ -43,11 +43,15 @@ if (DEFINED ENV{Z3_HOME})
     message(STATUS "Z3_HOME redefined to " $ENV{Z3_HOME})
 endif ()
 
-if (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
+    message("Expect to find z3 libs under ${Z3_HOME}lib")
     link_directories(${Z3_HOME}/lib)
 else ()
+    message("Expect to find z3 libs under ${Z3_HOME}bin")
     link_directories(${Z3_HOME}/bin)
 endif ()
+
+
 
 # Link DbgHelp on Windows for stacktraces in the crash handler
 if(WIN32)

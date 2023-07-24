@@ -5,6 +5,7 @@
 #ifndef COODDY_ANALYZER_SOURCE_SOLVER_UNTRUSTEDSOURCES_H_
 #define COODDY_ANALYZER_SOURCE_SOLVER_UNTRUSTEDSOURCES_H_
 
+#include <_types/_uint64_t.h>
 #include <solver/SolverContext.h>
 
 #include "TraverseExpression.h"
@@ -123,7 +124,7 @@ public:
             if (!isExternalSource) {
                 auto& sourceValue = const_cast<UntrustedSourceExpr*>(source)->sourceId;
                 sourceValue = 0;
-                model.eval(source->sourceExpr).is_numeral_u64(sourceValue);
+                model.eval(source->sourceExpr).is_numeral_u64(reinterpret_cast<uint64_t &>(sourceValue));
             }
             result.source = source;
             return result;

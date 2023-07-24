@@ -5,7 +5,8 @@
 <summary>Linux
 </summary>
 
-Firstly you need to install **gcc**, **make**. Any version, which supports c++-17, but we recommend to use gcc-8 and above.
+Firstly you need to install **gcc**, **make**. Any version, which supports c++-17, but we recommend to use gcc-8 and
+above.
 
 ```bash
 apt-get update && apt-get install python3 python3-distutils make git gcc-8 g++-8 libz-dev wget unzip libtinfo-dev libssl-dev -y
@@ -33,14 +34,45 @@ make install
 <summary>Windows
 </summary>
 
-* Install [mingw](https://www.mingw-w64.org/downloads/#msys2) with support of c++-17. Add <your_mingw_root_installation_dir>\mingw64\bin to your environmental variable PATH, if not presented already.
-* Install [cmake](https://cmake.org/download/) at least version 3.25.1. Add <your_cmake_root_installation_dir>\bin to your environmental variable PATH, if not presented already.
+* Install [mingw](https://www.mingw-w64.org/downloads/#msys2) with support of c++-17. Add <
+  your_mingw_root_installation_dir>\mingw64\bin to your environmental variable PATH, if not presented already.
+* Install [cmake](https://cmake.org/download/) at least version 3.25.1. Add <your_cmake_root_installation_dir>\bin to
+  your environmental variable PATH, if not presented already.
+
+</details>
+
+<details>
+<summary>OSX
+</summary>
+
+* Install XCode
+* Install **cmake**, at least version 3.25.0.
+
+```bash
+wget https://github.com/Kitware/CMake/archive/refs/tags/v3.25.0.zip
+unzip v3.25.0.zip && cd v3.25.0.zip
+mkdir build && cd build
+../configure
+make -j <your_num_of_cores>
+make install
+```
+
+* Install brew and install dependencies
+
+```bash
+brew install python3 python3-distutils make git libz-dev wget unzip libtinfo-dev libssl-dev -y
+ln -sf /usr/bin/clang /usr/bin/cc && ln -sf /usr/bin/clang++ /usr/bin/c++
+```
 
 </details>
 
 ## Build 3rd party dependencies
 
-Cooddy uses standalone libraries of **clang** and **z3**, so manual build of specified versions is required. Now Cooddy is based on LLVM 14.0 and z3 4.8.9. As far as backward compatibility of LLVM project is not guaranteed we recommend to use these versions.#### Build z3
+Cooddy uses standalone libraries of **clang** and **z3**, so manual build of specified versions is required. Now Cooddy
+is based on LLVM 14.0 and z3 4.8.9. As far as backward compatibility of LLVM project is not guaranteed we recommend to
+use these versions.
+
+#### Build z3
 
 More info about z3 build: [here](https://github.com/Z3Prover/z3).
 
@@ -78,9 +110,21 @@ export Z3_HOME=<path_to_z3_installation>
 
 </details>
 
+<details>
+
+<summary>OSX
+</summary>
+
+```bash
+cmake -DZ3_BUILD_LIBZ3_SHARED=FALSE -G "CodeBlocks - Unix Makefiles" -DCMAKE_INSTALL_PREFIX=<your/installation/path> -DCMAKE_BUILD_TYPE=Release ../
+```
+
+</details>
+
 #### Build Clang
 
-More info about clang build: [here](https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm).
+More info about clang
+build: [here](https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm).
 
 ```bash
 wget https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-14.0.0.zip
@@ -90,6 +134,24 @@ cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang" -DLLVM_ENABLE_TE
 make -j <your_num_of_cores> && make install
 export LLVM_CMAKE=<path_to_clang_installation>lib/cmake
 ```
+
+#### Build Antlr
+By default, you don't need to build antlr, since there are distributed library inside cooddy repository. For now there is support for following builds:
+
+* OSX (arm64)
+* Linux (aarch64, x64)
+* Windows (x64)
+
+But if you received build error, then you have to build antlr and put it in the cooddy directory, by doing following steps:
+
+```bash
+git clone https://github.com/antlr/antlr4.git
+cd <anltr_root_dir>runtime/Cpp/
+./deploy-<your_os>.sh
+unzip antlr.zip
+cp <antlr_root_dir>/runtime/Cpp/lib/libantlr4-runtime.* <cooddy_root_dir>/external/antlr/lib/<your_os>/<your_cpu>
+```
+
 
 After that you can start build a Cooddy project.
 
@@ -102,9 +164,8 @@ After that you can start build a Cooddy project.
 
 <details>
 
-<summary>Linux
+<summary>Linux (OSX)
 </summary>
-
 
 ```bash
 git clone https://github.com/program-analysis-team/cooddy.git && cd cooddy

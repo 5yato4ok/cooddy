@@ -23,7 +23,7 @@ public:
         return myAccessKind;
     }
 
-    virtual std::optional<std::string> GetAttribute(std::string_view attrName) const
+    virtual std::optional<std::string> GetAttribute(std::string_view attrName) const override
     {
         if (attrName == "AccessKind") {
             return AccessKindToCStr(GetAccessKind());

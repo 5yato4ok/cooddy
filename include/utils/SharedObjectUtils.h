@@ -49,7 +49,13 @@ using LibHandle = void*;
 using LibSymbol = void*;
 LibHandle LoadSharedObject(const std::string& sharedObjectPath)
 {
+#if __APPLE__
+    return dlopen((sharedObjectPath + ".dylib").c_str(), RTLD_NOW);
+#elif __linux__
     return dlopen((sharedObjectPath + ".so").c_str(), RTLD_NOW);
+#else
+    assert(0)
+#endif
 }
 template <class TSymbol>
 TSymbol GetSymbol(LibHandle lib, const char* symbolName)
