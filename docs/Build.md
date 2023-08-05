@@ -116,7 +116,13 @@ export Z3_HOME=<path_to_z3_installation>
 </summary>
 
 ```bash
-cmake -DZ3_BUILD_LIBZ3_SHARED=FALSE -G "CodeBlocks - Unix Makefiles" -DCMAKE_INSTALL_PREFIX=<your/installation/path> -DCMAKE_BUILD_TYPE=Release ../
+wget https://github.com/Z3Prover/z3/archive/refs/tags/z3-4.8.9.zip
+unzip z3-4.8.9.zip && cd z3-4.8.9
+mkdir build && cd build
+cmake -DZ3_BUILD_LIBZ3_SHARED=FALSE -G "CodeBlocks - Unix Makefiles" -DCMAKE_INSTALL_PREFIX=<path_to_z3_installation> -DCMAKE_BUILD_TYPE=Release ../
+make -j <your_cores_num>
+make install
+export Z3_HOME=<path_to_z3_installation>
 ```
 
 </details>
