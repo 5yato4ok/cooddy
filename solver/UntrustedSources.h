@@ -5,7 +5,7 @@
 #ifndef COODDY_ANALYZER_SOURCE_SOLVER_UNTRUSTEDSOURCES_H_
 #define COODDY_ANALYZER_SOURCE_SOLVER_UNTRUSTEDSOURCES_H_
 
-#include <_types/_uint64_t.h>
+#include <cstdint>
 #include <solver/SolverContext.h>
 
 #include "TraverseExpression.h"
