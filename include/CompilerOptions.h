@@ -52,14 +52,24 @@ struct CompilerOptions {
         return std::find(options.begin(), options.end(), option) != options.end();
     }
 
-    std::string GetOptionValue(const std::string& option) const
-    {
-        auto s = option.size();
+    std::string GetOptionValue(const std::string &option) const {
         for (auto i = 0; i < options.size(); ++i) {
-            auto& op = options[i];
-            if (op.compare(0, s, option) == 0) {
-                return op[s] == '=' ? op.substr(s + 1) : (++i != options.size() ? options[i] : "");
+            auto delimiterPtr = options[i].find('=');
+            auto opName = options[i].substr(0, delimiterPtr);
+            if (opName != option) {
+                continue;
             }
+            std::string opValue = "";
+            if (delimiterPtr != std::string::npos) {
+                opValue = options[i].substr(delimiterPtr + 1, std::string::npos);
+            }
+            if (!opValue.empty()) {
+                return opValue;
+            }
+            if (i < options.size()) {
+                return options[i + 1];
+            }
+            return "";
         }
         return "";
     }
