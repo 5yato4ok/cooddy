@@ -1479,9 +1479,8 @@ DECLARE_STMT_CONVERTER(CXXTemporaryObjectExpr, CxxConstructExpression)
     ConvertConstructExpression(*visitor, *clangNode, *node);
 }
 
-DECLARE_STMT_CONVERTER(LambdaExpr, LambdaExpression)
-{
-    new (node) LambdaExpression();
+DECLARE_STMT_CONVERTER(LambdaExpr, CxxRecordDecl) {
+    new (node) LambdaExpression(visitor->GetNode(clangNode->getCallOperator()->getAsFunction()));
 }
 
 RecordDecl ConvertRecord(ASTVisitor& visitor, const clang::RecordDecl& clangNode)

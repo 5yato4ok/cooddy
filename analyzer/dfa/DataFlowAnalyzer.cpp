@@ -6,6 +6,7 @@
 
 #include <CrossTUContext.h>
 #include <ast/BinaryExpression.h>
+#include <ast/LambdaExpression.h>
 #include <ast/CallExpression.h>
 #include <ast/CxxMethodDecl.h>
 #include <ast/RefExpression.h>
@@ -183,10 +184,15 @@ static auto GetFunctionList(TranslationUnitPtr& unit, std::unordered_set<std::st
     Location functionEnd = 0;
     return unit->GetNodes([&](const Node* node) {
         auto function = GetFunctionByNode(*node, curFunction);
-        if (function != nullptr && node->GetRange().end < functionEnd) {
+        if (function != nullptr && (node->GetRange().end < functionEnd || function->GetName().find("operator()") != std::string::npos)) {
             calledFunctions.emplace(function->GetMangledName());
         }
-        function = Node::Cast<FunctionDecl>(node);
+        auto lambda = Node::Cast<LambdaExpression>(node);
+        if (lambda != nullptr) {
+            function = Node::Cast<FunctionDecl>(lambda->GetOperatorDecl());
+        } else {
+            function = Node::Cast<FunctionDecl>(node);
+        }
         if (function == nullptr || function->GetBody() == nullptr || function->IsPure()) {
             return false;
         }
@@ -253,6 +259,11 @@ void DataFlowAnalyzer::AnalyzeContext::CheckUnit(TranslationUnitPtr& unit)
     FunctionList functionCtxs;
     for (auto it : functions) {
         auto function = Node::Cast<FunctionDecl>(it);
+        auto lambda = Node::Cast<LambdaExpression>(it);
+
+        if(lambda!= nullptr) {
+            function = Node::Cast<FunctionDecl>(lambda->GetOperatorDecl());
+        }
         if (function == nullptr) {
             continue;
         }
